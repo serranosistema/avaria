@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>Painel — Brigada de Validade</title>
+
+    <meta name="theme-color" content="#6D28D9" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/painel.css" />
+  </head>
+  <body>
+    <header class="appbar">
+      <div class="appbar__brand">
+        <svg
+          width="26"
+          height="26"
+          viewBox="0 0 26 26"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect
+            x="2"
+            y="4"
+            width="2"
+            height="18"
+            rx="1"
+            fill="var(--primary)"
+          />
+          <rect
+            x="6"
+            y="4"
+            width="1"
+            height="18"
+            rx="0.5"
+            fill="var(--primary)"
+          />
+          <rect
+            x="9"
+            y="4"
+            width="3"
+            height="18"
+            rx="1"
+            fill="var(--primary)"
+          />
+          <rect
+            x="14"
+            y="4"
+            width="1"
+            height="18"
+            rx="0.5"
+            fill="var(--primary)"
+          />
+          <rect
+            x="17"
+            y="4"
+            width="2"
+            height="18"
+            rx="1"
+            fill="var(--primary)"
+          />
+          <rect
+            x="21"
+            y="4"
+            width="3"
+            height="18"
+            rx="1"
+            fill="var(--primary)"
+          />
+        </svg>
+        <div>
+          <div>Painel</div>
+          <div class="greeting">Olá, <strong id="funcName">—</strong></div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 0.4rem">
+        <a
+          class="theme-toggle"
+          href="relatorio.html"
+          aria-label="Gerar relatório"
+          style="text-decoration: none; display: grid; place-items: center"
+        >
+          <!-- heroicons: document-text -->
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3h7.5m-9-6h.008v.008H6.75v-.008zM6.75 21h10.5a2.25 2.25 0 002.25-2.25V8.25L15 3H6.75A2.25 2.25 0 004.5 5.25v13.5A2.25 2.25 0 006.75 21z"
+            />
+          </svg>
+        </a>
+        <button
+          class="theme-toggle"
+          id="themeToggle"
+          type="button"
+          aria-label="Alternar tema"
+        >
+          <svg
+            id="iconMoon"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <svg
+            id="iconSun"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            style="display: none"
+          >
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+        <button
+          class="theme-toggle"
+          id="logoutBtn"
+          type="button"
+          aria-label="Sair"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="page">
+      <div class="alert-banner" id="alertBanner"></div>
+
+      <div class="summary">
+        <div class="summary__card summary__card--vencido">
+          <span class="summary__num" id="summaryVencido">0</span>
+          <span class="summary__label">Vencidos</span>
+        </div>
+        <div class="summary__card summary__card--atencao">
+          <span class="summary__num" id="summaryAtencao">0</span>
+          <span class="summary__label">Atenção</span>
+        </div>
+        <div class="summary__card summary__card--ok">
+          <span class="summary__num" id="summaryOk">0</span>
+          <span class="summary__label">Ok</span>
+        </div>
+      </div>
+
+      <div class="filters">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Buscar por código ou descrição..."
+        />
+        <select id="corredorFilter">
+          <option value="">Todos</option>
+        </select>
+      </div>
+
+      <div class="list" id="list"></div>
+
+      <div class="empty-state" id="emptyState">
+        <svg
+          width="40"
+          height="40"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="3" y="7" width="18" height="13" rx="2"></rect>
+          <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+        </svg>
+        <p>
+          Nenhum item registrado ainda.<br />Bipe um produto ou adicione
+          manualmente.
+        </p>
+      </div>
+    </main>
+
+    <div class="fabs">
+      <button class="fab fab--secondary" id="openAddModal" type="button">
+        <!-- heroicons: plus -->
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          style="vertical-align: middle; margin-right: 0.35rem"
+        >
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        Manual
+      </button>
+
+      <a
+        class="fab fab--primary"
+        href="scanner.html"
+        style="
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+        "
+      >
+        <!-- heroicons: camera -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="size-6"
+          width="18"
+          height="18"
+        >
+          <path d="M12 9a3.75 3.75 0 1 0 0 7.5A3.75 3.75 0 0 0 12 9Z" />
+          <path
+            fill-rule="evenodd"
+            d="M9.344 3.071a49.52 49.52 0 0 1 5.312 0c.967.052 1.83.585 2.332 1.39l.821 1.317c.24.383.645.643 1.11.71.386.054.77.113 1.152.177 1.432.239 2.429 1.493 2.429 2.909V18a3 3 0 0 1-3 3h-15a3 3 0 0 1-3-3V9.574c0-1.416.997-2.67 2.429-2.909.382-.064.766-.123 1.151-.178a1.56 1.56 0 0 0 1.11-.71l.822-1.315a2.942 2.942 0 0 1 2.332-1.39ZM6.75 12.75a5.25 5.25 0 1 1 10.5 0 5.25 5.25 0 0 1-10.5 0Zm12-1.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+            clip-rule="evenodd"
+          />
+        </svg>
+
+        Bipar produto
+      </a>
+    </div>
+
+    <!-- Modal de cadastro manual -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal">
+        <h2>Adicionar item manualmente</h2>
+        <form id="addForm">
+          <div class="modal-row">
+            <div class="field">
+              <label for="fCorredor">Corredor</label>
+              <input type="text" id="fCorredor" placeholder="Ex: A3" required />
+            </div>
+            <div class="field">
+              <label for="fCodigo">Código</label>
+              <input
+                type="text"
+                id="fCodigo"
+                placeholder="Ex: 7891000"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="fDescricao">Descrição</label>
+            <input
+              type="text"
+              id="fDescricao"
+              placeholder="Ex: Leite Integral 1L"
+              required
+            />
+          </div>
+
+          <div class="modal-row">
+            <div class="field">
+              <label for="fQuantidade">Quantidade</label>
+              <input
+                type="number"
+                id="fQuantidade"
+                min="0"
+                value="1"
+                required
+              />
+            </div>
+            <div class="field">
+              <label for="fValidade">Validade</label>
+              <input type="date" id="fValidade" required />
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn btn--ghost" id="closeAddModal">
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn--primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="js/storage-local.js"></script>
+    <script src="js/painel.js"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("service-worker.js").catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>

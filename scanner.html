@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>Bipar produto — Brigada de Validade</title>
+
+    <meta name="theme-color" content="#6D28D9" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/scanner.css" />
+  </head>
+  <body>
+    <header class="appbar">
+      <div class="appbar__brand">
+        <a
+          href="painel.html"
+          class="theme-toggle"
+          aria-label="Voltar ao painel"
+          style="margin-right: 0.3rem"
+        >
+          <!-- heroicons: arrow-left -->
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+        </a>
+        <span>Bipar produto</span>
+      </div>
+
+      <button
+        class="theme-toggle"
+        id="themeToggle"
+        type="button"
+        aria-label="Alternar tema"
+      >
+        <!-- heroicons: moon -->
+        <svg
+          id="iconMoon"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"
+          />
+        </svg>
+        <!-- heroicons: sun -->
+        <svg
+          id="iconSun"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          style="display: none"
+        >
+          <path
+            d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+          />
+        </svg>
+      </button>
+    </header>
+
+    <main class="page">
+      <div class="mode-toggle">
+        <button type="button" id="modoCamera" class="active">
+          <!-- heroicons: camera -->
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.174C3.023 7.5 2.25 8.322 2.25 9.34v9.86c0 1.036.84 1.875 1.875 1.875h15.75c1.035 0 1.875-.84 1.875-1.875V9.34c0-1.018-.774-1.839-1.802-2.163a41.82 41.82 0 00-1.134-.174 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.02 48.63 48.63 0 00-4.638 0 2.192 2.192 0 00-1.737 1.02l-.821 1.316z"
+            />
+            <path
+              d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z"
+            />
+          </svg>
+          Câmera
+        </button>
+        <button type="button" id="modoManual">
+          <!-- heroicons: pencil-square -->
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+            />
+          </svg>
+          Manual
+        </button>
+      </div>
+
+      <div class="camera-error" id="cameraError">
+        <!-- heroicons: exclamation-triangle -->
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
+          />
+        </svg>
+        <span
+          >Não deu pra acessar a câmera. Verifique a permissão do navegador ou
+          use o modo manual.</span
+        >
+      </div>
+
+      <div class="scan-area" id="scanArea">
+        <div id="reader"></div>
+        <button
+          type="button"
+          class="torch-btn"
+          id="torchBtn"
+          aria-label="Lanterna"
+        >
+          <!-- heroicons: bolt -->
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+            />
+          </svg>
+        </button>
+      </div>
+      <p class="scan-hint" id="scanHint">
+        Aponte a câmera pro código de barras do produto
+      </p>
+
+      <form class="item-form" id="itemForm">
+        <div class="modal-row">
+          <div class="field">
+            <label for="fCorredor">Corredor</label>
+            <input type="text" id="fCorredor" placeholder="Ex: A3" required />
+          </div>
+          <div class="field field-codigo-wrap" id="codigoWrap">
+            <label for="fCodigo">Código</label>
+            <input
+              type="text"
+              id="fCodigo"
+              placeholder="Bipe ou digite"
+              required
+            />
+            <!-- heroicons: check-circle -->
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="fDescricao">Descrição</label>
+          <input
+            type="text"
+            id="fDescricao"
+            placeholder="Ex: Leite Integral 1L"
+            required
+          />
+        </div>
+
+        <div class="modal-row">
+          <div class="field">
+            <label for="fQuantidade">Quantidade</label>
+            <input type="number" id="fQuantidade" min="0" value="1" required />
+          </div>
+          <div class="field">
+            <label for="fValidade">Validade</label>
+            <input type="date" id="fValidade" required />
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn--primary">
+          Salvar e bipar próximo
+        </button>
+      </form>
+
+      <div class="recent">
+        <h3>Bipados agora</h3>
+        <div id="recentList"></div>
+      </div>
+    </main>
+
+    <div class="toast" id="toast">
+      <!-- heroicons: check-circle -->
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span>Item salvo!</span>
+    </div>
+
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script src="js/storage-local.js"></script>
+    <script src="js/scanner.js"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("service-worker.js").catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>

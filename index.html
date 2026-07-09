@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>Brigada de Validade</title>
+    <meta
+      name="description"
+      content="Controle de validade de produtos — Conti"
+    />
+
+    <!-- PWA -->
+    <meta name="theme-color" content="#6D28D9" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Brigada" />
+
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <header class="appbar">
+      <div class="appbar__brand">
+        <!-- ícone: código de barras, remete à bipagem de produtos -->
+        <svg
+          width="26"
+          height="26"
+          viewBox="0 0 26 26"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect
+            x="2"
+            y="4"
+            width="2"
+            height="18"
+            rx="1"
+            fill="var(--primary)"
+          />
+          <rect
+            x="6"
+            y="4"
+            width="1"
+            height="18"
+            rx="0.5"
+            fill="var(--primary)"
+          />
+          <rect
+            x="9"
+            y="4"
+            width="3"
+            height="18"
+            rx="1"
+            fill="var(--primary)"
+          />
+          <rect
+            x="14"
+            y="4"
+            width="1"
+            height="18"
+            rx="0.5"
+            fill="var(--primary)"
+          />
+          <rect
+            x="17"
+            y="4"
+            width="2"
+            height="18"
+            rx="1"
+            fill="var(--primary)"
+          />
+          <rect
+            x="21"
+            y="4"
+            width="3"
+            height="18"
+            rx="1"
+            fill="var(--primary)"
+          />
+        </svg>
+        <span>Brigada de Validade</span>
+      </div>
+
+      <button
+        class="theme-toggle"
+        id="themeToggle"
+        type="button"
+        aria-label="Alternar tema claro/escuro"
+      >
+        <svg
+          id="iconMoon"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <svg
+          id="iconSun"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          style="display: none"
+        >
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+      </button>
+    </header>
+
+    <main class="wrap">
+      <section class="card">
+        <span class="card__eyebrow">Conti · Controle de estoque</span>
+        <h1>Entrar na brigada</h1>
+        <p class="sub">
+          Registre a validade dos produtos do seu corredor direto pelo celular.
+        </p>
+
+        <form id="loginForm">
+          <div class="field">
+            <label for="funcionario">Funcionário</label>
+            <input
+              type="text"
+              id="funcionario"
+              name="funcionario"
+              placeholder="Seu nome"
+              autocomplete="name"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="senha">Código de acesso</label>
+            <input
+              type="password"
+              id="senha"
+              name="senha"
+              placeholder="••••••"
+              autocomplete="current-password"
+            />
+          </div>
+
+          <button type="submit" class="btn btn--primary">Entrar</button>
+        </form>
+
+        <div class="divider">ou</div>
+
+        <button type="button" class="btn btn--ghost" id="guestBtn">
+          Entrar sem login (modo teste)
+        </button>
+      </section>
+    </main>
+
+    <p class="footer-note">
+      v0.1 · funciona offline · instale este app na tela inicial
+    </p>
+
+    <script>
+      // ---------- Tema claro/escuro ----------
+      const root = document.documentElement;
+      const toggleBtn = document.getElementById("themeToggle");
+      const iconMoon = document.getElementById("iconMoon");
+      const iconSun = document.getElementById("iconSun");
+
+      function applyTheme(theme) {
+        root.classList.toggle("dark", theme === "dark");
+        iconMoon.style.display = theme === "dark" ? "none" : "block";
+        iconSun.style.display = theme === "dark" ? "block" : "none";
+        localStorage.setItem("bv_theme", theme);
+      }
+
+      const savedTheme =
+        localStorage.getItem("bv_theme") ||
+        (window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light");
+      applyTheme(savedTheme);
+
+      toggleBtn.addEventListener("click", () => {
+        const next = root.classList.contains("dark") ? "light" : "dark";
+        applyTheme(next);
+      });
+
+      // ---------- Login (placeholder — depois troca por Firebase Auth) ----------
+      document.getElementById("loginForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const nome = document.getElementById("funcionario").value.trim();
+        if (!nome) return;
+        localStorage.setItem("bv_funcionario", nome);
+        window.location.href = "painel.html";
+      });
+
+      document.getElementById("guestBtn").addEventListener("click", () => {
+        localStorage.setItem("bv_funcionario", "Convidado");
+        window.location.href = "painel.html";
+      });
+
+      // ---------- Registro do Service Worker (PWA) ----------
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("service-worker.js").catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>

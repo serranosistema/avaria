@@ -1,0 +1,346 @@
+/* =========================================================
+   Brigada de Validade — estilos do painel
+   (depende de css/style.css já carregado antes)
+   ========================================================= */
+
+/* cores semânticas extras — não vêm do tema original,
+   adicionadas só pra status de validade */
+:root {
+  --success: oklch(0.62 0.17 150);
+  --success-bg: oklch(0.95 0.05 150);
+  --warning: oklch(0.75 0.16 70);
+  --warning-bg: oklch(0.95 0.06 70);
+}
+.dark {
+  --success: oklch(0.7 0.17 150);
+  --success-bg: oklch(0.18 0.05 150);
+  --warning: oklch(0.78 0.16 70);
+  --warning-bg: oklch(0.2 0.06 70);
+}
+
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 1rem 6rem;
+}
+
+.greeting {
+  font-size: 0.85rem;
+  color: var(--muted-foreground);
+}
+
+.greeting strong {
+  color: var(--foreground);
+}
+
+/* ---------- Resumo (cards de status) ---------- */
+.summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin: 1rem 0 1.25rem;
+}
+
+.summary__card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) * 1.2);
+  padding: 0.85rem 0.7rem;
+  text-align: center;
+}
+
+.summary__num {
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1;
+  display: block;
+}
+
+.summary__label {
+  font-size: 0.7rem;
+  color: var(--muted-foreground);
+  margin-top: 0.3rem;
+  display: block;
+}
+
+.summary__card--vencido .summary__num {
+  color: var(--destructive);
+}
+.summary__card--atencao .summary__num {
+  color: var(--warning);
+}
+.summary__card--ok .summary__num {
+  color: var(--success);
+}
+
+/* ---------- Aviso ---------- */
+.alert-banner {
+  display: none;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--destructive);
+  color: white;
+  padding: 0.7rem 0.9rem;
+  border-radius: calc(var(--radius) * 0.9);
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.alert-banner.show {
+  display: flex;
+}
+
+/* ---------- Filtros ---------- */
+.filters {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.filters input[type="text"],
+.filters select {
+  flex: 1;
+  padding: 0.6rem 0.75rem;
+  border-radius: calc(var(--radius) * 0.8);
+  border: 1px solid var(--input);
+  background: var(--card);
+  color: var(--foreground);
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+
+.filters select {
+  flex: 0 0 auto;
+  max-width: 130px;
+}
+
+/* ---------- Lista de itens ---------- */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--border);
+  border-radius: calc(var(--radius) * 1.1);
+  padding: 0.8rem 0.9rem;
+}
+
+.item--vencido {
+  border-left-color: var(--destructive);
+}
+.item--atencao {
+  border-left-color: var(--warning);
+}
+.item--ok {
+  border-left-color: var(--success);
+}
+
+.item__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.item__top {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.item__codigo {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.item__corredor {
+  font-size: 0.72rem;
+  color: var(--primary);
+  background: var(--accent);
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.item__descricao {
+  font-size: 0.85rem;
+  color: var(--muted-foreground);
+  margin-top: 0.15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item__meta {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin-top: 0.35rem;
+}
+
+.item__badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.item--vencido .item__badge {
+  background: var(--destructive);
+  color: white;
+}
+.item--atencao .item__badge {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+.item--ok .item__badge {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+.item__del {
+  border: none;
+  background: transparent;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.item__del:hover {
+  background: var(--accent);
+  color: var(--destructive);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--muted-foreground);
+}
+
+.empty-state svg {
+  margin-bottom: 0.75rem;
+  opacity: 0.5;
+}
+
+/* ---------- Botões flutuantes ---------- */
+.fabs {
+  position: fixed;
+  bottom: 1.25rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0 1rem;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.fab {
+  flex: 1;
+  max-width: 260px;
+  padding: 0.85rem 1rem;
+  border-radius: calc(var(--radius) * 1.4);
+  border: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  box-shadow: 0 8px 24px -8px oklch(0 0 0 / 25%);
+}
+
+.fab--primary {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.fab--secondary {
+  background: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+}
+
+/* ---------- Modal de adição manual ---------- */
+/* ---------- Modal de adição manual ---------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: oklch(0 0 0 / 45%);
+  display: none;
+  z-index: 50;
+}
+
+/* aberto */
+.modal-overlay.show {
+  display: flex;
+}
+
+/* MOBILE (padrão): nasce de baixo */
+.modal-overlay {
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.modal {
+  width: 100%;
+  max-width: 480px;
+  background: var(--card);
+  color: var(--card-foreground);
+  border-radius: 1.5rem 1.5rem 0 0;
+  padding: 1.5rem 1.25rem 2rem;
+  max-height: 88dvh;
+  overflow-y: auto;
+
+  /* animação mobile */
+  transform: translateY(100%);
+  opacity: 0.98;
+  transition:
+    transform 0.28s ease,
+    opacity 0.2s ease;
+}
+
+.modal-overlay.show .modal {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* desktop: centralizado no meio (sem subir de baixo) */
+@media (min-width: 901px) {
+  .modal-overlay {
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .modal {
+    width: min(520px, 92vw);
+    max-height: 86vh;
+    border-radius: calc(var(--radius) * 1.4);
+    padding: 1.25rem;
+
+    /* animação desktop */
+    transform: translateY(6px) scale(0.98);
+    opacity: 0;
+  }
+
+  .modal-overlay.show .modal {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}

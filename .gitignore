@@ -1,0 +1,6 @@
+# Config real do Firebase (usar firebase-config.example.js como modelo)
+js/firebase-config.js
+
+# Sistema
+.DS_Store
+Thumbs.db
