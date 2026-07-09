@@ -12,7 +12,7 @@
  * -----------------------------------------------------------------
  */
 
-const CACHE = "brigada-validade-v3";
+const CACHE = "brigada-validade-v4";
 
 // arquivos do próprio app — se algum path aqui estiver errado, a
 // instalação do service worker falha (assim você percebe o erro).
@@ -54,8 +54,30 @@ const CDN_LIBS = [
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE).then(async (cache) => {
-      await cache.addAll(APP_SHELL);
+      // cacheia cada arquivo do app shell individualmente — se um
+      // único arquivo estiver com caminho/nome errado (404), ele fica
+      // de fora, mas NÃO derruba a instalação inteira do service worker.
+      // Se algo falhar, aparece um aviso no console com a URL exata.
+      await Promise.allSettled(
+        APP_SHELL.map((url) =>
+          fetch(url)
+            .then((resp) => {
+              if (resp.ok) {
+                cache.put(url, resp);
+              } else {
+                console.warn(
+                  "[service-worker] não encontrado (" + resp.status + "):",
+                  url,
+                );
+              }
+            })
+            .catch((err) =>
+              console.warn("[service-worker] falhou ao buscar:", url, err),
+            ),
+        ),
+      );
 
+      // bibliotecas de CDN — mesma lógica resiliente
       await Promise.allSettled(
         CDN_LIBS.map((url) =>
           fetch(url, { mode: "cors" })
