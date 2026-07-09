@@ -271,7 +271,7 @@ btnExportPdf.addEventListener("click", () => {
 
   doc.setFontSize(16);
   doc.setFont(undefined, "bold");
-  doc.text("Brigada de Validade — Conti", 14, 18);
+  doc.text("Brigada de Validade", 14, 18);
 
   doc.setFontSize(10);
   doc.setFont(undefined, "normal");
