@@ -122,11 +122,14 @@ self.addEventListener("fetch", (event) => {
       const buscaRedeEAtualiza = fetch(request)
         .then((resposta) => {
           if (resposta && resposta.ok) {
+            // AQUI ESTÁ A CORREÇÃO: Clonar IMEDIATAMENTE antes do cache.open
+            const respostaParaCache = resposta.clone();
+
             caches
               .open(CACHE)
-              .then((cache) => cache.put(request, resposta.clone()));
+              .then((cache) => cache.put(request, respostaParaCache));
           }
-          return resposta;
+          return resposta; // Retorna a original para a tela não travar
         })
         .catch(() => null);
 
