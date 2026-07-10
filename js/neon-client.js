@@ -1,10 +1,9 @@
 /**
- * neon-client.js — instância única do cliente Neon (Auth + Data API).
+ * neon-client.js — instância única do cliente Neon (Data API).
  * -----------------------------------------------------------------
- * Módulo ES (por isso os <script type="module"> que vão usar isso).
- * Tanto o js/auth.js (login/sessão) quanto o js/db.js (leitura/gravação
- * de itens) importam o "client" daqui, pra não criar duas conexões
- * separadas com configurações que podem divergir.
+ * Módulo ES. Mantém a conexão com o banco.
+ * O Auth agora serve apenas para pegar o token anônimo inicial
+ * que permite consultar a tabela de usuários publicamente.
  * -----------------------------------------------------------------
  */
 import { createClient } from "https://esm.sh/@neondatabase/neon-js";
@@ -17,9 +16,9 @@ const NEON_AUTH_URL =
 export const client = createClient({
   auth: {
     url: NEON_AUTH_URL,
-    // sem cadastro público — só o usuário criado manualmente no Console
-    // (Auth → Create user) consegue logar
-    allowAnonymous: false,
+    // ESSA É A MUDANÇA: Permite que o SDK conecte como "anonymous"
+    // para conseguir ler a tabela de usuários e fazer o nosso login manual.
+    allowAnonymous: true,
   },
   dataApi: {
     url: NEON_DATA_API_URL,

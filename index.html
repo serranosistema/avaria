@@ -110,7 +110,6 @@
           type="button"
           aria-label="Instalar aplicativo"
         >
-          <!-- heroicons: arrow-down-tray -->
           <svg
             width="18"
             height="18"
@@ -197,28 +196,28 @@
 
         <form id="loginForm">
           <div class="field">
-            <label for="funcionario">Funcionário</label>
+            <label for="email">E-mail</label>
             <input
-              type="text"
-              id="funcionario"
-              name="funcionario"
-              placeholder="Seu nome"
-              autocomplete="name"
+              type="email"
+              id="email"
+              name="email"
+              placeholder="seu@email.com"
+              autocomplete="email"
               required
             />
           </div>
 
           <div class="field">
-            <label for="senha">Código de acesso</label>
+            <label for="senha">Senha</label>
             <input
               type="password"
               id="senha"
               name="senha"
-              placeholder="••••••"
+              placeholder="••••••••"
               autocomplete="current-password"
               required
             />
-            <p id="loginErro" class="login-erro">Código de acesso incorreto.</p>
+            <p id="loginErro" class="login-erro">E-mail ou senha incorretos.</p>
           </div>
 
           <button type="submit" class="btn btn--primary">Entrar</button>
@@ -264,13 +263,8 @@
       }
     </script>
     <script type="module">
-      // ---------- Login real (Neon Auth) ----------
+      // ---------- Login manual direto na base ----------
       import { login } from "./js/auth.js";
-
-      // E-mail fixo da conta única — o mesmo que você usou ao criar o
-      // usuário manualmente no Console da Neon (Auth → Create user).
-      // Troque aqui pro e-mail que você escolheu lá.
-      const EMAIL_LOGIN = "equipe@suaempresa.com";
 
       const form = document.getElementById("loginForm");
       const erroEl = document.getElementById("loginErro");
@@ -278,28 +272,28 @@
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const nome = document.getElementById("funcionario").value.trim();
+        const email = document.getElementById("email").value.trim();
         const senha = document.getElementById("senha").value;
-        if (!nome) return;
+
+        if (!email || !senha) return;
 
         erroEl.classList.remove("show");
         btnSubmit.disabled = true;
         btnSubmit.textContent = "Entrando...";
 
-        const { error } = await login(EMAIL_LOGIN, senha);
+        const { error } = await login(email, senha);
 
         btnSubmit.disabled = false;
         btnSubmit.textContent = "Entrar";
 
         if (error) {
-          erroEl.textContent = "Código de acesso incorreto.";
+          erroEl.textContent = error.message || "E-mail ou senha incorretos.";
           erroEl.classList.add("show");
           return;
         }
 
-        // nome é só pra identificar quem fez a conferência nos relatórios —
-        // não tem nenhum papel de segurança, quem garante o acesso é a sessão do Neon Auth
-        localStorage.setItem("bv_funcionario", nome);
+        // O redirecionamento acontece caso não haja erros.
+        // O armazenamento do nome já foi feito dentro do js/auth.js.
         window.location.href = "painel.html";
       });
     </script>
