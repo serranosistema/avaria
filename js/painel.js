@@ -47,7 +47,7 @@ function renderCorredores(items) {
   ].sort();
   const atual = corredorEl.value;
   corredorEl.innerHTML =
-    '<option value="">Todos</option>' +
+    '<option value="">Todos corredores</option>' +
     corredores.map((c) => `<option value="${c}">${c}</option>`).join("");
   if (corredores.includes(atual)) corredorEl.value = atual;
 }
@@ -152,6 +152,9 @@ function render() {
 searchEl.addEventListener("input", render);
 corredorEl.addEventListener("change", render);
 
+// quando o sync.js trouxer itens de outro aparelho, atualiza a lista sozinho
+window.addEventListener("bv-dados-atualizados", render);
+
 listEl.addEventListener("click", (e) => {
   const btn = e.target.closest("[data-del]");
   if (!btn) return;
@@ -187,14 +190,12 @@ addForm.addEventListener("submit", (e) => {
   render();
 });
 
-// ---------- Saudação / logout ----------
+// ---------- Saudação ----------
 document.getElementById("funcName").textContent =
   localStorage.getItem("bv_funcionario") || "Convidado";
 
-document.getElementById("logoutBtn").addEventListener("click", () => {
-  localStorage.removeItem("bv_funcionario");
-  window.location.href = "index.html";
-});
+// (o botão de logout é tratado no <script type="module"> do painel.html,
+// porque precisa chamar o auth.js pra encerrar a sessão de verdade)
 
 // ---------- Tema (mesmo padrão do index.html) ----------
 (function initTheme() {

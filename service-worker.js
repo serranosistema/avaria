@@ -12,7 +12,7 @@
  * -----------------------------------------------------------------
  */
 
-const CACHE = "brigada-validade-v4";
+const CACHE = "brigada-validade-v5";
 
 // arquivos do próprio app — se algum path aqui estiver errado, a
 // instalação do service worker falha (assim você percebe o erro).
@@ -39,6 +39,8 @@ const APP_SHELL = [
   "./js/relatorio.js",
   "./js/pwa-install.js",
   "./js/offline-status.js",
+  "./js/db.js",
+  "./js/sync.js",
 ];
 
 // bibliotecas de terceiros (CDN) usadas no scanner e no relatório.

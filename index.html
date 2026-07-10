@@ -216,17 +216,13 @@
               name="senha"
               placeholder="••••••"
               autocomplete="current-password"
+              required
             />
+            <p id="loginErro" class="login-erro">Código de acesso incorreto.</p>
           </div>
 
           <button type="submit" class="btn btn--primary">Entrar</button>
         </form>
-
-        <div class="divider">ou</div>
-
-        <button type="button" class="btn btn--ghost" id="guestBtn">
-          Entrar sem login (modo teste)
-        </button>
       </section>
     </main>
 
@@ -260,26 +256,52 @@
         applyTheme(next);
       });
 
-      // ---------- Login (placeholder — depois troca por Firebase Auth) ----------
-      document.getElementById("loginForm").addEventListener("submit", (e) => {
-        e.preventDefault();
-        const nome = document.getElementById("funcionario").value.trim();
-        if (!nome) return;
-        localStorage.setItem("bv_funcionario", nome);
-        window.location.href = "painel.html";
-      });
-
-      document.getElementById("guestBtn").addEventListener("click", () => {
-        localStorage.setItem("bv_funcionario", "Convidado");
-        window.location.href = "painel.html";
-      });
-
       // ---------- Registro do Service Worker (PWA) ----------
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
           navigator.serviceWorker.register("service-worker.js").catch(() => {});
         });
       }
+    </script>
+    <script type="module">
+      // ---------- Login real (Neon Auth) ----------
+      import { login } from "./js/auth.js";
+
+      // E-mail fixo da conta única — o mesmo que você usou ao criar o
+      // usuário manualmente no Console da Neon (Auth → Create user).
+      // Troque aqui pro e-mail que você escolheu lá.
+      const EMAIL_LOGIN = "equipe@suaempresa.com";
+
+      const form = document.getElementById("loginForm");
+      const erroEl = document.getElementById("loginErro");
+      const btnSubmit = form.querySelector('button[type="submit"]');
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const nome = document.getElementById("funcionario").value.trim();
+        const senha = document.getElementById("senha").value;
+        if (!nome) return;
+
+        erroEl.classList.remove("show");
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = "Entrando...";
+
+        const { error } = await login(EMAIL_LOGIN, senha);
+
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = "Entrar";
+
+        if (error) {
+          erroEl.textContent = "Código de acesso incorreto.";
+          erroEl.classList.add("show");
+          return;
+        }
+
+        // nome é só pra identificar quem fez a conferência nos relatórios —
+        // não tem nenhum papel de segurança, quem garante o acesso é a sessão do Neon Auth
+        localStorage.setItem("bv_funcionario", nome);
+        window.location.href = "painel.html";
+      });
     </script>
     <script src="js/offline-status.js"></script>
     <script src="js/pwa-install.js"></script>
