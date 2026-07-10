@@ -1,42 +1,55 @@
 /**
- * auth.js — login, logout e verificação de sessão via Neon Auth.
+ * auth.js — login, logout e verificação de sessão manual (Direto no Banco).
  * -----------------------------------------------------------------
- * Módulo ES. Usa o client único (js/neon-client.js) — nunca cria
- * outra instância, pra não ter configurações divergentes.
- *
- * - login(email, senha): usado no index.html
- * - logout(): usado no botão "Sair" do painel
- * - sessaoValida(): usado no topo de painel.html/scanner.html/
- *   relatorio.html — valida um token assinado pelo Neon. Diferente
- *   de uma flag solta no localStorage, ninguém "forja" isso pelo
- *   DevTools do navegador.
+ * Como desativamos o Auth Beta do Neon, a sessão agora é gerenciada
+ * verificando o usuário na tabela 'usuarios' e salvando no localStorage.
  * -----------------------------------------------------------------
  */
 import { client } from "./neon-client.js";
 
 export async function login(email, senha) {
-  return client.auth.signIn.email({ email, password: senha });
+  try {
+    // Faz a consulta direta no banco
+    const { data, error } = await client
+      .from("usuarios")
+      .select("*")
+      .eq("email", email)
+      .eq("senha", senha)
+      .single();
+
+    if (error || !data) {
+      return { error: { message: "E-mail ou senha incorretos." } };
+    }
+
+    // Login com sucesso: salva os dados do usuário no localStorage
+    localStorage.setItem("bv_usuario_logado", JSON.stringify(data));
+
+    // Atualiza também a flag do funcionário caso use em outros lugares
+    localStorage.setItem("bv_funcionario", data.nome);
+
+    return { data, error: null };
+  } catch (err) {
+    return { error: { message: "Falha de conexão ou credenciais inválidas." } };
+  }
 }
 
 export async function logout() {
-  await client.auth.signOut();
+  // Limpa tudo e manda pra tela inicial
+  localStorage.removeItem("bv_usuario_logado");
   localStorage.removeItem("bv_funcionario");
   window.location.href = "index.html";
 }
 
 export async function sessaoValida() {
-  try {
-    const { data } = await client.auth.getSession();
-    return !!(data && data.session);
-  } catch {
-    return false;
-  }
+  // Como não há mais token do servidor, a sessão é válida se o registro existir no localStorage
+  const userStr = localStorage.getItem("bv_usuario_logado");
+  return !!userStr;
 }
 
 export async function usuarioAtual() {
   try {
-    const { data } = await client.auth.getSession();
-    return data?.user || null;
+    const userStr = localStorage.getItem("bv_usuario_logado");
+    return userStr ? JSON.parse(userStr) : null;
   } catch {
     return null;
   }
