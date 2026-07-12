@@ -49,6 +49,13 @@ function textoBadge(status, dias) {
   return "Dentro do prazo";
 }
 
+// monta a URL de busca de imagens no Google pra esse produto,
+// combinando descrição + código pra dar mais contexto na busca
+function urlBuscaImagem(item) {
+  const termo = [item.descricao, item.codigo].filter(Boolean).join(" ").trim();
+  return `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(termo || item.codigo || "")}`;
+}
+
 function formatarDataBR(iso) {
   if (!iso) return "—";
   return new Date(iso + "T00:00:00").toLocaleDateString("pt-BR");
@@ -92,8 +99,8 @@ function itemHtml(item) {
     <div class="item item--${status}">
       <div class="item__main">
         <div class="item__top">
-          <span class="item__codigo">${escapeHtml(item.codigo || "Sem código")}</span>
-          ${item.corredor ? `<span class="item__corredor">Corredor ${escapeHtml(item.corredor)}</span>` : ""}
+          <a class="item__codigo" href="${urlBuscaImagem(item)}" target="_blank" rel="noopener noreferrer" title="Ver imagens desse produto no Google">${escapeHtml(item.codigo || "Sem código")}<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" /></svg></a>
+          ${item.corredor ? `<span class="item__corredor">${escapeHtml(item.corredor)}</span>` : ""}
         </div>
         <div class="item__descricao">${escapeHtml(item.descricao || "Sem descrição")}</div>
         <div class="item__meta">
@@ -207,9 +214,9 @@ btnClearSign.addEventListener("click", () => {
 });
 
 // ---------- Exportar CSV ----------
-btnExportCsv.addEventListener("click", () => {
+btnExportCsv.addEventListener("click", async () => {
   if (itensFiltrados.length === 0) {
-    alert("Não há itens no período selecionado.");
+    await bvAlert("Não há itens no período selecionado.");
     return;
   }
 
@@ -249,18 +256,20 @@ btnExportCsv.addEventListener("click", () => {
 });
 
 // ---------- Exportar PDF ----------
-btnExportPdf.addEventListener("click", () => {
+btnExportPdf.addEventListener("click", async () => {
   if (itensFiltrados.length === 0) {
-    alert("Não há itens no período selecionado.");
+    await bvAlert("Não há itens no período selecionado.");
     return;
   }
   if (!conferidoPorEl.value.trim()) {
-    alert("Preencha o nome de quem está conferindo antes de gerar o PDF.");
+    await bvAlert(
+      "Preencha o nome de quem está conferindo antes de gerar o PDF.",
+    );
     conferidoPorEl.focus();
     return;
   }
   if (window.signaturePad.isEmpty()) {
-    alert(
+    await bvAlert(
       "Peça pra quem está conferindo assinar no campo de assinatura antes de gerar o PDF.",
     );
     return;

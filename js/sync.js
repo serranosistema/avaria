@@ -26,7 +26,11 @@ async function sincronizar() {
     const pendentes = BVStorage.getPendentes();
     for (const item of pendentes) {
       try {
-        await NeonDB.inserir(item);
+        if (item.pendenteAtualizacao) {
+          await NeonDB.atualizar(item);
+        } else {
+          await NeonDB.inserir(item);
+        }
         BVStorage.marcarSincronizado(item.id);
       } catch (err) {
         console.warn("[sync] falhou ao subir item", item.id, err);

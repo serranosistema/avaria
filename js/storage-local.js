@@ -55,6 +55,23 @@ const BVStorage = (() => {
     return items[idx];
   }
 
+  // edição feita pelo usuário num item já lançado (ex: corrigir a validade).
+  // Diferente de updateItem: marca o item pra ser ATUALIZADO no Neon no
+  // próximo sync (e não inserido de novo, já que ele já existe lá).
+  function editarItem(id, dadosAtualizados) {
+    const items = getItems();
+    const idx = items.findIndex((i) => i.id === id);
+    if (idx === -1) return null;
+    items[idx] = {
+      ...items[idx],
+      ...dadosAtualizados,
+      sincronizado: false,
+      pendenteAtualizacao: true,
+    };
+    saveItems(items);
+    return items[idx];
+  }
+
   function deleteItem(id) {
     const items = getItems().filter((i) => i.id !== id);
     saveItems(items);
@@ -75,6 +92,7 @@ const BVStorage = (() => {
     const idx = items.findIndex((i) => i.id === id);
     if (idx !== -1) {
       items[idx].sincronizado = true;
+      delete items[idx].pendenteAtualizacao;
       saveItems(items);
     }
   }
@@ -99,6 +117,7 @@ const BVStorage = (() => {
     saveItems,
     addItem,
     updateItem,
+    editarItem,
     deleteItem,
     clearAll,
     getPendentes,

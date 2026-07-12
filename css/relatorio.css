@@ -183,8 +183,30 @@
 }
 
 .item__codigo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
   font-weight: 700;
   font-size: 0.88rem;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--muted-foreground);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.item__codigo svg {
+  flex-shrink: 0;
+  opacity: 0.55;
+}
+
+.item__codigo:hover {
+  color: var(--primary);
+  text-decoration-color: var(--primary);
+}
+
+.item__codigo:hover svg {
+  opacity: 0.9;
 }
 
 .item__corredor {

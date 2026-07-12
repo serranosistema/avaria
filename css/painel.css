@@ -47,6 +47,37 @@
   border-radius: calc(var(--radius) * 1.2);
   padding: 0.85rem 0.7rem;
   text-align: center;
+  cursor: pointer;
+  font-family: inherit;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.05s ease;
+}
+
+.summary__card:active {
+  transform: scale(0.98);
+}
+
+.summary__card.active {
+  border-color: currentColor;
+  box-shadow: 0 0 0 1.5px currentColor inset;
+}
+
+.summary__card--vencido {
+  color: inherit;
+}
+.summary__card--vencido.active {
+  border-color: var(--destructive);
+  box-shadow: 0 0 0 1.5px var(--destructive) inset;
+}
+.summary__card--atencao.active {
+  border-color: var(--warning);
+  box-shadow: 0 0 0 1.5px var(--warning) inset;
+}
+.summary__card--ok.active {
+  border-color: var(--success);
+  box-shadow: 0 0 0 1.5px var(--success) inset;
 }
 
 .summary__num {
@@ -115,6 +146,27 @@
   max-width: 130px;
 }
 
+.clear-filters {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0 0 0.75rem;
+  margin-top: -0.4rem;
+}
+
+.clear-filters.show {
+  display: block;
+}
+
+.clear-filters:hover {
+  text-decoration: underline;
+}
+
 /* ---------- Lista de itens ---------- */
 .list {
   display: flex;
@@ -156,8 +208,30 @@
 }
 
 .item__codigo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
   font-weight: 700;
   font-size: 0.9rem;
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--muted-foreground);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.item__codigo svg {
+  flex-shrink: 0;
+  opacity: 0.55;
+}
+
+.item__codigo:hover {
+  color: var(--primary);
+  text-decoration-color: var(--primary);
+}
+
+.item__codigo:hover svg {
+  opacity: 0.9;
 }
 
 .item__corredor {
@@ -207,6 +281,13 @@
   color: var(--success);
 }
 
+.item__actions {
+  display: flex;
+  gap: 0.2rem;
+  flex-shrink: 0;
+}
+
+.item__edit,
 .item__del {
   border: none;
   background: transparent;
@@ -218,6 +299,11 @@
   place-items: center;
   border-radius: 50%;
   flex-shrink: 0;
+}
+
+.item__edit:hover {
+  background: var(--accent);
+  color: var(--primary);
 }
 
 .item__del:hover {

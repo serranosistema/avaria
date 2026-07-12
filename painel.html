@@ -261,18 +261,33 @@
       <div class="alert-banner" id="alertBanner"></div>
 
       <div class="summary">
-        <div class="summary__card summary__card--vencido">
+        <button
+          type="button"
+          class="summary__card summary__card--vencido"
+          data-status="vencido"
+          aria-pressed="false"
+        >
           <span class="summary__num" id="summaryVencido">0</span>
           <span class="summary__label">Vencidos</span>
-        </div>
-        <div class="summary__card summary__card--atencao">
+        </button>
+        <button
+          type="button"
+          class="summary__card summary__card--atencao"
+          data-status="atencao"
+          aria-pressed="false"
+        >
           <span class="summary__num" id="summaryAtencao">0</span>
           <span class="summary__label">Atenção</span>
-        </div>
-        <div class="summary__card summary__card--ok">
+        </button>
+        <button
+          type="button"
+          class="summary__card summary__card--ok"
+          data-status="ok"
+          aria-pressed="false"
+        >
           <span class="summary__num" id="summaryOk">0</span>
           <span class="summary__label">Ok</span>
-        </div>
+        </button>
       </div>
 
       <div class="filters">
@@ -282,9 +297,13 @@
           placeholder="Buscar por código ou descrição..."
         />
         <select id="corredorFilter">
-          <option value="">Todos corredores</option>
+          <option value="">Filtro</option>
         </select>
       </div>
+
+      <button type="button" class="clear-filters" id="clearFilters">
+        Limpar filtros
+      </button>
 
       <div class="list" id="list"></div>
 
@@ -325,12 +344,16 @@
     <!-- Modal de cadastro manual -->
     <div class="modal-overlay" id="modalOverlay">
       <div class="modal">
-        <h2>Adicionar item manualmente</h2>
+        <h2 id="modalTitle">Adicionar item manualmente</h2>
         <form id="addForm">
           <div class="modal-row">
             <div class="field">
-              <label for="fCorredor">Corredor</label>
-              <input type="text" id="fCorredor" placeholder="Ex: A3" required />
+              <label for="fCorredor">Local ou categoria (opcional)</label>
+              <input
+                type="text"
+                id="fCorredor"
+                placeholder="Ex: Padaria, A3..."
+              />
             </div>
             <div class="field">
               <label for="fCodigo">Código</label>
@@ -382,6 +405,7 @@
 
     <script src="js/storage-local.js"></script>
     <script type="module" src="js/sync.js"></script>
+    <script src="js/confirm.js"></script>
     <script src="js/painel.js"></script>
     <script>
       if ("serviceWorker" in navigator) {

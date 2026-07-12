@@ -64,7 +64,22 @@ async function remover(id) {
   if (error) throw error;
 }
 
-export const NeonDB = { listarTodos, inserir, remover };
+// usado quando um item já existente é editado (ex: corrigir a validade
+// depois de lançado) — atualiza a linha em vez de tentar inserir de novo
+async function atualizar(item) {
+  const linha = paraBanco(item);
+  delete linha.id; // não faz sentido tentar sobrescrever a chave primária
+  const { data, error } = await client
+    .from(TABELA)
+    .update(linha)
+    .eq("id", item.id)
+    .select()
+    .single();
+  if (error) throw error;
+  return paraApp(data);
+}
+
+export const NeonDB = { listarTodos, inserir, remover, atualizar };
 
 // também expõe no window, caso algum script clássico precise checar
 // rapidinho se o módulo já carregou (ex: mostrar um aviso de "conectando...")
