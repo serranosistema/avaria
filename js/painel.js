@@ -70,7 +70,7 @@ function renderCorredores(items) {
   ].sort();
   const atual = corredorEl.value;
   corredorEl.innerHTML =
-    '<option value="">Todos locais/categorias</option>' +
+    '<option value="">Filtro</option>' +
     corredores.map((c) => `<option value="${c}">${c}</option>`).join("");
   if (corredores.includes(atual)) corredorEl.value = atual;
 }
