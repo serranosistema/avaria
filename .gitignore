@@ -6,3 +6,5 @@ js/firebase-config.js
 Thumbs.db
 
 regui.html
+
+.env

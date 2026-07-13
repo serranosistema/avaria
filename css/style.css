@@ -109,6 +109,16 @@ body {
   background: var(--accent);
 }
 
+.theme-toggle.active {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+
+.theme-toggle:disabled {
+  cursor: not-allowed;
+}
+
 /* ---------- Banner de status offline ---------- */
 .offline-banner {
   display: none;

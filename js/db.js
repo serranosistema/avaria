@@ -69,6 +69,9 @@ async function remover(id) {
 async function atualizar(item) {
   const linha = paraBanco(item);
   delete linha.id; // não faz sentido tentar sobrescrever a chave primária
+  // qualquer edição rearma a notificação — se a validade mudou, o item
+  // precisa ser reavaliado pelo serviço de notificações
+  linha.notificado = false;
   const { data, error } = await client
     .from(TABELA)
     .update(linha)

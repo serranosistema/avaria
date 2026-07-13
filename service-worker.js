@@ -12,7 +12,7 @@
  * -----------------------------------------------------------------
  */
 
-const CACHE = "brigada-validade-v5";
+const CACHE = "brigada-validade-v6";
 
 // arquivos do próprio app — se algum path aqui estiver errado, a
 // instalação do service worker falha (assim você percebe o erro).
@@ -41,6 +41,8 @@ const APP_SHELL = [
   "./js/offline-status.js",
   "./js/db.js",
   "./js/sync.js",
+  "./js/confirm.js",
+  "./js/push.js",
 ];
 
 // bibliotecas de terceiros (CDN) usadas no scanner e no relatório.
@@ -144,4 +146,47 @@ self.addEventListener("fetch", (event) => {
       );
     }),
   );
+});
+
+/* -----------------------------------------------------------------
+ * Notificações Push
+ * -----------------------------------------------------------------
+ * O disparo real acontece num serviço externo (função na Vercel,
+ * chamada por um cron). Aqui só recebemos o evento "push" que o
+ * navegador entrega pro Service Worker e desenhamos a notificação.
+ * ----------------------------------------------------------------- */
+
+self.addEventListener("push", (event) => {
+  let dados = {};
+  if (event.data) {
+    try {
+      dados = event.data.json();
+    } catch {
+      dados = { title: "Brigada de Validade", body: event.data.text() };
+    }
+  }
+
+  const opcoes = {
+    body: dados.body || "",
+    icon: dados.icon || "./icons/android-chrome-192x192.png",
+    badge: "./icons/favicon-32x32.png",
+    vibrate: [100, 50, 100],
+    data: { url: dados.url || "./painel.html" },
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(
+      dados.title || "Brigada de Validade",
+      opcoes,
+    ),
+  );
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const url =
+    event.notification.data && event.notification.data.url
+      ? event.notification.data.url
+      : "./painel.html";
+  event.waitUntil(self.clients.openWindow(url));
 });
