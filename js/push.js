@@ -96,8 +96,11 @@ async function ativar() {
   // significa que esse aparelho já tinha assinatura salva
   if (error && !mensagemDeDuplicado(error)) {
     console.warn("[push] falhou ao salvar assinatura no Neon", error);
+    const detalhe =
+      (error && (error.message || error.details || error.hint)) || "";
     await bvAlert(
-      "As notificações foram ativadas no navegador, mas não consegui salvar no banco agora. Tenta de novo com internet.",
+      "As notificações foram ativadas no navegador, mas não consegui salvar no banco agora." +
+        (detalhe ? `\n\nDetalhe: ${detalhe}` : ""),
     );
     return;
   }
