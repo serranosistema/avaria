@@ -15,6 +15,11 @@ import { NeonDB } from "./db.js";
 
 let sincronizando = false;
 
+// timestamp (ISO, vindo do próprio Neon) da última vez que a
+// sincronização puxou dados com sucesso — assim as próximas rodadas só
+// buscam o que mudou desde então, em vez da tabela inteira de novo
+const CHAVE_ULTIMO_SYNC = "bv_ultimo_sync_em";
+
 async function sincronizar() {
   if (sincronizando) return; // evita rodar duas vezes ao mesmo tempo
   if (!navigator.onLine) return;
@@ -38,11 +43,25 @@ async function sincronizar() {
       }
     }
 
-    // 2) baixa o que outros aparelhos já bipetaram
-    const remotos = await NeonDB.listarTodos();
-    const novos = BVStorage.mesclarRemotos(remotos);
-    if (novos > 0) {
-      console.info(`[sync] ${novos} item(ns) novo(s) trazido(s) do banco`);
+    // 2) baixa só o que mudou desde a última sincronização (itens
+    // novos de outros aparelhos OU itens editados em outro aparelho)
+    const desde = localStorage.getItem(CHAVE_ULTIMO_SYNC) || undefined;
+    const remotos = await NeonDB.listarTodos(desde);
+    const alterados = BVStorage.mesclarRemotos(remotos);
+
+    if (remotos.length > 0) {
+      const maisRecente = remotos.reduce(
+        (max, r) =>
+          r.atualizadoEm && r.atualizadoEm > max ? r.atualizadoEm : max,
+        desde || "",
+      );
+      if (maisRecente) localStorage.setItem(CHAVE_ULTIMO_SYNC, maisRecente);
+    }
+
+    if (alterados > 0) {
+      console.info(
+        `[sync] ${alterados} item(ns) novo(s)/atualizado(s) trazido(s) do banco`,
+      );
       window.dispatchEvent(new CustomEvent("bv-dados-atualizados"));
     }
   } catch (err) {

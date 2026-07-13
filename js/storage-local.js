@@ -97,18 +97,23 @@ const BVStorage = (() => {
     }
   }
 
-  // mescla itens vindos do Neon (bipados por outro aparelho) com os
-  // locais, sem duplicar quem já existe aqui (compara pelo id)
+  // mescla itens vindos do Neon com os locais: adiciona os que ainda
+  // não existem aqui e ATUALIZA os que já existem mas mudaram em outro
+  // aparelho (ex: alguém corrigiu a validade pelo celular do colega).
+  // Com sincronização incremental, cada item recebido aqui já é, por
+  // definição, algo que mudou desde a última checagem (novo ou editado).
   function mesclarRemotos(itensRemotos) {
     const locais = getItems();
-    const idsLocais = new Set(locais.map((i) => i.id));
-    const novos = itensRemotos
-      .filter((r) => !idsLocais.has(r.id))
-      .map((r) => ({ ...r, sincronizado: true }));
-    if (novos.length > 0) {
-      saveItems([...locais, ...novos]);
+    const porId = new Map(locais.map((i) => [i.id, i]));
+
+    itensRemotos.forEach((remoto) => {
+      porId.set(remoto.id, { ...remoto, sincronizado: true });
+    });
+
+    if (itensRemotos.length > 0) {
+      saveItems([...porId.values()]);
     }
-    return novos.length;
+    return itensRemotos.length;
   }
 
   return {
