@@ -70,7 +70,7 @@ function renderCorredores(items) {
   ].sort();
   const atual = corredorEl.value;
   corredorEl.innerHTML =
-    '<option value="">Filtro</option>' +
+    '<option value="">Todos locais/categorias</option>' +
     corredores.map((c) => `<option value="${c}">${c}</option>`).join("");
   if (corredores.includes(atual)) corredorEl.value = atual;
 }
@@ -266,9 +266,11 @@ document
   .getElementById("openAddModal")
   .addEventListener("click", abrirModalAdicao);
 document.getElementById("closeAddModal").addEventListener("click", fecharModal);
-modalOverlay.addEventListener("click", (e) => {
-  if (e.target === modalOverlay) fecharModal();
-});
+document
+  .getElementById("closeAddModalX")
+  .addEventListener("click", fecharModal);
+// clique fora do modal NÃO fecha mais — evita perder o que já foi
+// digitado com um toque sem querer. Só fecha pelo X ou "Cancelar".
 
 addForm.addEventListener("submit", (e) => {
   e.preventDefault();

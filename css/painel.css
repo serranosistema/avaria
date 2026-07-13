@@ -368,6 +368,8 @@
   position: fixed;
   inset: 0;
   background: oklch(0 0 0 / 45%);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
   display: none;
   z-index: 50;
 }
@@ -399,6 +401,36 @@
   transition:
     transform 0.28s ease,
     opacity 0.2s ease;
+}
+
+.modal__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.modal__header h2 {
+  margin: 0;
+}
+
+.modal__close {
+  flex-shrink: 0;
+  width: 2.1rem;
+  height: 2.1rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: none;
+  background: var(--secondary);
+  color: var(--muted-foreground);
+  cursor: pointer;
+  margin-top: -0.2rem;
+}
+
+.modal__close:hover {
+  background: var(--accent);
+  color: var(--foreground);
 }
 
 .modal-overlay.show .modal {
